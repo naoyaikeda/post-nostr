@@ -1,0 +1,19 @@
+{
+  "name": "post-nostr",
+  "version": "0.0.0",
+  "description": "post to nostr",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "post": "node post.js"
+  },
+  "dependencies": {
+    "@noble/hashes": "^2.0.1",
+    "dotenv": "^17.2.3",
+    "nostr-tools": "^2.19.3",
+    "ws": "^8.18.3"
+  }
+}
