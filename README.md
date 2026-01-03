@@ -1,6 +1,6 @@
 # post-nostr
 
-Nostrリレーにメッセージを投稿するためのシンプルなCLIツールです。Node.jsと`nostr-tools`を使用しています。
+Nostrリレーにメッセージを投稿するためのシンプルなCLIツールです。プロファイル管理により複数のアカウントや設定を切り替えて使用できます。
 
 ## インストール
 
@@ -13,30 +13,57 @@ npm install
 
 ## 設定
 
-プロジェクトのルートディレクトリに `.env` ファイルを作成し、以下の変数を設定してください。
+### 1. プロファイル設定 (config.yaml)
+
+プロジェクトルートに `config.yaml` を作成し、プロファイルとリレーを設定してください。
+
+```yaml
+common:
+  relays:
+    - wss://relay.damus.io
+    - wss://relay-jp.nostr.wirednet.jp
+
+profiles:
+  default:
+    nsec: nsec1... # メインアカウントの秘密鍵
+    relays:
+      - wss://nos.lol # 追加のリレー
+  
+  sub:
+    nsec: nsec1... # サブアカウントの秘密鍵
+    relays: []
+```
+
+### 2. デフォルトプロファイル (.env)
+
+`.env` ファイルでデフォルトで使用するプロファイルを指定できます。
 
 ```env
-NOSTR_NSEC=nsec1... # あなたの秘密鍵 (nsec形式)
-NOSTR_RELAY_URL=wss://relay.damus.io # (オプション) 投稿先のリレーURL。デフォルトは wss://relay.damus.io
+DEFAULT_PROFILE=default
 ```
 
 ## 使い方
 
-以下のコマンドでメッセージを投稿できます。
+### 基本的な投稿
+
+デフォルトプロファイルを使用してメッセージを投稿します。
 
 ```bash
-# デフォルトメッセージ ("Hello, Nostr!") を投稿
-node post.js
-
-# 任意のメッセージを投稿
-node post.js "投稿したいメッセージ"
+node post.js "Hello, Nostr!"
 ```
 
-または `npm` スクリプトを使用する場合:
+### プロファイルを指定して投稿
+
+`--profile` または `-p` オプションでプロファイルを切り替えます。
 
 ```bash
-npm run post -- "投稿したいメッセージ"
+node post.js --profile sub "サブ垢からの投稿です"
 ```
+
+## 技術スタック
+- Node.js
+- nostr-tools
+- js-yaml
 
 ## ライセンス
 
