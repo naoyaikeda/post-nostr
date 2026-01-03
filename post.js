@@ -89,6 +89,7 @@ if (relayUrls.length === 0) {
 
 async function main() {
     const pool = new SimplePool()
+    let exitCode = 0
 
     try {
         const { type, data } = nip19.decode(profile.nsec)
@@ -108,8 +109,10 @@ async function main() {
         console.log('Event published successfully:', signedEvent.id)
     } catch (error) {
         console.error('Failed to publish event:', error)
+        exitCode = 1
     } finally {
         pool.close(relayUrls)
+        process.exit(exitCode)
     }
 }
 
