@@ -119,7 +119,7 @@ async function main() {
         exitCode = 1
     } finally {
         pool.close(relayUrls)
-        process.exit(exitCode)
+        process.exitCode = exitCode
     }
 }
 
