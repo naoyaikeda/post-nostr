@@ -15,7 +15,9 @@ npm install
 
 ### 1. プロファイル設定 (post-nostr-profiles.yaml)
 
-プロジェクトルートに `post-nostr-profiles.yaml` を作成し、プロファイルとリレーを設定してください。
+ホームディレクトリに `post-nostr-profiles.yaml` を作成し、プロファイルとリレーを設定してください。
+
+Linux/Mac: `~/post-nostr-profiles.yaml`
 
 ```yaml
 common:
@@ -36,7 +38,9 @@ profiles:
 
 ### 2. デフォルトプロファイル (post-nostr.env)
 
-`post-nostr.env` ファイルでデフォルトで使用するプロファイルを指定できます。
+ホームディレクトリに `post-nostr.env` ファイルを作成し、デフォルトで使用するプロファイルを指定できます。
+
+Linux/Mac: `~/post-nostr.env`
 
 ```env
 DEFAULT_PROFILE=default
