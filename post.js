@@ -120,6 +120,10 @@ async function main() {
     } finally {
         pool.close(relayUrls)
         process.exitCode = exitCode
+        // Force exit if the process doesn't exit naturally within 3 seconds
+        setTimeout(() => {
+            process.exit(exitCode)
+        }, 3000).unref()
     }
 }
 
