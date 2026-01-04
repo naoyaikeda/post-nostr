@@ -1,17 +1,18 @@
+#!/usr/bin/env node
 const fs = require('fs')
 const yaml = require('js-yaml')
 const { finalizeEvent } = require('nostr-tools/pure')
 const { SimplePool } = require('nostr-tools/pool')
 const nip19 = require('nostr-tools/nip19')
 
-require('dotenv').config()
+require('dotenv').config({ path: 'post-nostr.env' })
 
 function showHelp() {
     console.log(`
 Usage: node post.js [options] <message>
 
 Options:
-  -p, --profile <name>  Specify the profile to use (default: settings in .env)
+  -p, --profile <name>  Specify the profile to use (default: settings in post-nostr.env)
   -h, --help            Show this help message
 
 Examples:
@@ -55,20 +56,20 @@ if (!message) {
     process.exit(1)
 }
 
-// config.yaml の読み込み
+// post-nostr-profiles.yaml の読み込み
 let config
 try {
-    const fileContents = fs.readFileSync('./config.yaml', 'utf8')
+    const fileContents = fs.readFileSync('./post-nostr-profiles.yaml', 'utf8')
     config = yaml.load(fileContents)
 } catch (e) {
-    console.error('Failed to load config.yaml:', e)
+    console.error('Failed to load post-nostr-profiles.yaml:', e)
     process.exit(1)
 }
 
 // プロファイルの取得
 const profile = config.profiles[profileName]
 if (!profile) {
-    console.error(`Profile "${profileName}" not found in config.yaml`)
+    console.error(`Profile "${profileName}" not found in post-nostr-profiles.yaml`)
     process.exit(1)
 }
 

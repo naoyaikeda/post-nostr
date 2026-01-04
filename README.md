@@ -13,9 +13,9 @@ npm install
 
 ## 設定
 
-### 1. プロファイル設定 (config.yaml)
+### 1. プロファイル設定 (post-nostr-profiles.yaml)
 
-プロジェクトルートに `config.yaml` を作成し、プロファイルとリレーを設定してください。
+プロジェクトルートに `post-nostr-profiles.yaml` を作成し、プロファイルとリレーを設定してください。
 
 ```yaml
 common:
@@ -34,9 +34,9 @@ profiles:
     relays: []
 ```
 
-### 2. デフォルトプロファイル (.env)
+### 2. デフォルトプロファイル (post-nostr.env)
 
-`.env` ファイルでデフォルトで使用するプロファイルを指定できます。
+`post-nostr.env` ファイルでデフォルトで使用するプロファイルを指定できます。
 
 ```env
 DEFAULT_PROFILE=default

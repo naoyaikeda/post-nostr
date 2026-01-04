@@ -6,6 +6,9 @@
   "author": "",
   "type": "commonjs",
   "main": "index.js",
+  "bin": {
+    "post-nostr": "./post.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "post": "node post.js"

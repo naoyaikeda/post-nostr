@@ -9,6 +9,8 @@ All notable changes to this project will be documented in this file.
 - **Configuration**:
   - `config.yaml` 導入によるプロファイル管理（複数アカウント・リレー設定のサポート）
   - `.env` をデフォルトプロファイル指定用に変更
+  - `config.yaml` を `post-nostr-profiles.yaml` に変更
+  - `.env` を `post-nostr.env` に変更
 - **CLI**:
   - `--profile` / `-p` オプション追加（プロファイル切り替え）
   - `-h` / `--help` オプション追加（ヘルプ表示）
