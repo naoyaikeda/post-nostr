@@ -1,3 +1,5 @@
 node_modules/
 .env
 config.yaml
+post-nostr.env
+post-nostr-profiles.yaml
