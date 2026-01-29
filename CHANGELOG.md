@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## [0.1.1] - 2026-01-29
 
+### Added
+- **Libraries**:
+  - `cac` 導入 (CLI引数解析の強化)
+  - `zod` 導入 (設定ファイルのスキーマ定義とバリデーション)
+
 ### Fixed
 - **Dependencies**: `nostr-tools` のバージョンを `2.19.3` に固定 (インストールエラーの回避)
 
