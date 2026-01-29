@@ -13,4 +13,6 @@
   - [dotenv](https://github.com/motdotla/dotenv): 環境変数の管理
   - [ws](https://github.com/websockets/ws): WebSocketクライアント
   - [js-yaml](https://github.com/nodeca/js-yaml): YAML設定ファイルの解析
+  - [cac](https://github.com/cacjs/cac): コマンドライン引数の解析
+  - [zod](https://github.com/colinhacks/zod): スキーマ宣言とバリデーション
 
