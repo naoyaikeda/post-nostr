@@ -64,10 +64,20 @@ node post.js "Hello, Nostr!"
 node post.js --profile sub "サブ垢からの投稿です"
 ```
 
+### 設定ファイルを指定して実行
+
+`--config` オプションで設定ファイルのパスを指定できます（テスト時などに便利です）。
+
+```bash
+node post.js --config ./my-test-config.yaml "テスト設定での投稿"
+```
+
 ## 技術スタック
 - Node.js
 - nostr-tools
 - js-yaml
+- cac (CLI引数解析)
+- zod (設定バリデーション)
 
 ## ライセンス
 

@@ -6,59 +6,56 @@ const yaml = require('js-yaml')
 const { finalizeEvent } = require('nostr-tools/pure')
 const { SimplePool } = require('nostr-tools/pool')
 const nip19 = require('nostr-tools/nip19')
+const cac = require('cac')
+const { z } = require('zod')
 
 const homedir = os.homedir()
 const envPath = path.join(homedir, 'post-nostr.env')
-const configPath = path.join(homedir, 'post-nostr-profiles.yaml')
+const defaultConfigPath = path.join(homedir, 'post-nostr-profiles.yaml')
 
 require('dotenv').config({ path: envPath })
 
-function showHelp() {
-    console.log(`
-Usage: post-nostr [options] <message>
-
-Options:
-  -p, --profile <name>  Specify the profile to use (default: settings in ~/post-nostr.env)
-  -h, --help            Show this help message
-
-Examples:
-  node post.js "Hello Nostr"
-  node post.js -p sub "Message from sub account"
-`)
-}
-
-// 引数の解析
-const args = process.argv.slice(2)
-let profileName = process.env.DEFAULT_PROFILE || 'default'
-let messageParts = []
-
-// 引数がない、またはヘルプフラグがある場合
-if (args.length === 0 || args.includes('-h') || args.includes('--help')) {
-    showHelp()
-    process.exit(0)
-}
-
-// 引数からプロファイルとメッセージを抽出
-for (let i = 0; i < args.length; i++) {
-    const arg = args[i]
-    if (arg === '--profile' || arg === '-p') {
-        if (args[i + 1]) {
-            profileName = args[i + 1]
-            i++ // 値をスキップ
-        } else {
-            console.error('Error: --profile requires an argument')
-            process.exit(1)
+const ProfileSchema = z.object({
+    nsec: z.string().refine((val) => {
+        try {
+            const { type } = nip19.decode(val)
+            return type === 'nsec'
+        } catch (e) {
+            return false
         }
-    } else {
-        messageParts.push(arg)
-    }
-}
+    }, { message: "Invalid nsec format or checksum. Must be a valid bech32 'nsec' string." }),
+    relays: z.array(z.string()).optional()
+})
 
-const message = messageParts.join(' ')
+const ConfigSchema = z.object({
+    common: z.object({
+        relays: z.array(z.string()).optional()
+    }).optional(),
+    profiles: z.record(z.string(), ProfileSchema)
+})
+
+// CAC Setup
+const cli = cac('post-nostr')
+
+cli.command('[...message]', 'Post a message')
+    .option('-p, --profile <name>', 'Specify the profile to use', {
+        default: process.env.DEFAULT_PROFILE || 'default'
+    })
+    .option('--config <path>', 'Specify config file path', {
+        default: defaultConfigPath
+    })
+
+cli.help()
+
+const parsed = cli.parse()
+
+const profileName = parsed.options.profile
+const configPath = parsed.options.config
+const message = parsed.args.join(' ')
 
 if (!message) {
     console.error('Error: Message is required.')
-    showHelp()
+    cli.outputHelp()
     process.exit(1)
 }
 
@@ -66,9 +63,20 @@ if (!message) {
 let config
 try {
     const fileContents = fs.readFileSync(configPath, 'utf8')
-    config = yaml.load(fileContents)
+    const rawConfig = yaml.load(fileContents)
+    const result = ConfigSchema.safeParse(rawConfig)
+
+    if (!result.success) {
+        console.error(`Invalid configuration in ${configPath}:`)
+        result.error.issues.forEach(issue => {
+            console.error(` - Path: ${issue.path.join('.') || 'root'}`)
+            console.error(`   Error: ${issue.message}`)
+        })
+        process.exit(1)
+    }
+    config = result.data
 } catch (e) {
-    console.error(`Failed to load post-nostr-profiles.yaml from ${configPath}:`, e)
+    console.error(`Failed to load post-nostr-profiles.yaml from ${configPath}:`, e.message)
     process.exit(1)
 }
 
